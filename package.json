@@ -1,0 +1,14 @@
+{
+  "name": "comp229-intro-nodejs",
+  "version": "1.0.0",
+  "description": "getting acquainted with node and TS",
+  "main": "index.js",
+  "author": "Kenny <kenpfowler@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^15.3.1"
+  }
+}
