@@ -1,20 +1,29 @@
 "use strict";
-const http = require("http");
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const http_1 = __importDefault(require("http"));
+const fs_1 = __importDefault(require("fs"));
 const hostname = "127.0.0.1";
 const port = 3000;
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "text/plain");
-  res.end(
-    "Nodemon restarts the server automatically, cool!  Doesn't need start script in the package.json either."
-  );
+const server = http_1.default.createServer((req, res) => {
+    res.setHeader("Content-Type", "text/html");
+    displayHome(res);
 });
 server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+    console.log(`Server running at http://${hostname}:${port}/`);
 });
+function displayHome(res) {
+    fs_1.default.readFile("index.html", (err, data) => {
+        if (err) {
+            res.writeHead(404);
+            res.end("Error: 404 - Page not Found");
+            console.log("Error");
+            return;
+        }
+        res.writeHead(200);
+        res.end(data);
+    });
+}
 //# sourceMappingURL=index.js.map
-//ts for us to write code with fewer errors.  JS is to be run by node
-//we configure ts by creating a tsconfig.json file
-//we use the command tsc to transpile from our index.ts file to our index.js file
-//we can use ctrl+shift+b in order to watch for changes in our index.ts file and transpile them to JS
-//We can remove the errors from our TS file by using proper ES6 syntax for the require/import statement

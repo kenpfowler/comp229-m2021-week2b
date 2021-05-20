@@ -1,5 +1,7 @@
 //boilerplate code can be found at nodejs.org > docs > guides
 import http from "http";
+import path from "path";
+import fs from "fs";
 //node by itself is "bare bones. Just a JS runtime. Therefore, we need to require modules to build functionality onto a node app"
 //http is built into node, so we don't have to download it with npm, but we do need to require it to access the code
 //all node servers will use this object in some way.
@@ -7,14 +9,20 @@ import http from "http";
 const hostname: string = "127.0.0.1";
 const port: number = 3000;
 
+//how can we read a file into our webpage?  We can use the file system module
+//the args here: 1. path, 2. callback function that handles error and data
+//error which serves
+//data is a buffer which is composed of bits read from index HTML.
+//each charachter gets put into a buffer which is just an array of data.
+
 //This method instantiates an object of type HTTP.
 //Takes a request object and response object as an args
 const server: http.Server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "text/plain");
-  res.end(
-    "Nodemon restarts the server automatically, cool!  Doesn't need start script in the package.json either."
-  );
+  //in this header we set the MIME type to text/html so that the browser knows how to interpert
+  //the buffer of bytes were sending it.  If we set it as text/plain, for example, it will litterally print our html file.
+  //the browser uses the MIME type to decide what a file is, not the file extension.
+  res.setHeader("Content-Type", "text/html");
+  displayHome(res);
 });
 //NOTE: once we configure the server object and start it we cannot reconfigure it
 //without restarting the server because the object has already been created and is immutable.
@@ -37,3 +45,16 @@ server.listen(port, hostname, () => {
 
 //you can see the dependecies in the newly created node_modules folder
 //Also note that a yarn lock file is created. You can only use npm or yarn but not both to manage your packages.
+
+function displayHome(res: http.ServerResponse): void {
+  fs.readFile("index.html", (err, data) => {
+    if (err) {
+      res.writeHead(404);
+      res.end("Error: 404 - Page not Found");
+      console.log("Error");
+      return;
+    }
+    res.writeHead(200);
+    res.end(data);
+  });
+}
